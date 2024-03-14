@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {{blog_details.blogname}} {%endblock%}</title>
+</head>
+<body>
+  {% block content %}
+    <h1> {{blog_details.blogname}} </h1>
+    <div>Written By - {{blog_details.author}} Updated - {{blog_details.modified_date}}</div><br/>
+    <hr> <br/>
+    <p>{{blog_details.content}}</p>
+    <br/><br/>
+    <hr>
+        <p>Likes : <span id="like-count">{{ blog_details.likes.count }}</span>
+        <button id="like_button", value="{{blog_details.id}}" class="btn btn-dark">Like</button>
+        Dislikes : <span id="dislike-count">{{ blog_details.dislikes.count }}</span>
+        <button id="dislike_button", value="{{blog_details.id}}" class="btn btn-dark">Dislike</button>
+        <p id="error-message" style="color: red;"></p>
+    <a href="{%url 'home' %}" class="btn btn-dark">Back</a></p>
+  <hr>
+  <h2>Comments</h2>
+    <form id="comment-form" method="post" action="">
+        {% csrf_token %}
+        <input type="hidden" name="blog_id" value="{{ blog_details.id }}">
+        <label for="comment-content">Add comment:</label><br>
+        <textarea id="comment-content" name="content" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+    <a href="{% url 'mycommenthistory' blog_details.pk %}">My Comment History</a>
+    <div id="comment-list">
+        {% if blog_details.comments.all %}
+            {% for comment in blog_details.comments.all %}
+                <strong> {{ comment.user.username }} - {{ comment.modified_date }} </strong>
+                <br/><br/>
+                 {{comment.comment_text}}
+                <br/><hr>
+            {% endfor %}
+        {% endif %}
+     </div>
+  {% endblock %}
+
+</body>
+</html>
