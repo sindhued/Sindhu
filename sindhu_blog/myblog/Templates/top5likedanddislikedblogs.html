@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+  {% block content %}
+  <h3>Top 5 Commented blogs written by you</h3><hr><br/>
+      <h5>Liked Blogs</h5>
+      {% for blog in likedblogs %}
+        <h7> {{blog.blogname}} </h7>
+        <div>Written By - {{blog.author}} Updated - {{blog.modified_date}}</div><br/>
+        Likes : <span>{{ blog.likes.count }}</span>
+        <hr><br/>
+      {% endfor %}
+      <h5>Disliked Blogs</h5>
+      {% for blog in dislikedblogs %}
+        <h7> {{blog.blogname}} </h7>
+        <div>Written By - {{blog.author}} Updated - {{blog.modified_date}}</div><br/>
+        Dislikes : <span>{{ blog.dislikes.count }}</span>
+        <hr><br/>
+      {% endfor %}
+  {% endblock %}
+
+</body>
+</html>

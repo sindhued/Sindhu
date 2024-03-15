@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {{ blog_details.blogname }} {% endblock %}</title>
+</head>
+<body>
+  {% block content %}
+    <div class="blog-details-container">
+        <h1 class="blog-details-title">{{ blog_details.blogname }}</h1>
+        <div class="blog-details-meta">Written By - {{ blog_details.author }} | Updated - {{ blog_details.modified_date }}</div>
+        <hr>
+        <div class="blog-details-content">{{ blog_details.content }}</div>
+        <hr>
+        <div class="reaction-section">
+            <p class="reaction-count">
+                Likes: <span id="like-count">{{ blog_details.likes.count }}</span>
+                <button id="like_button" value="{{ blog_details.id }}" class="btn btn-like">Like</button>
+                Dislikes: <span id="dislike-count">{{ blog_details.dislikes.count }}</span>
+                <button id="dislike_button" value="{{ blog_details.id }}" class="btn btn-dislike">Dislike</button>
+            </p>
+            <p id="error-message" class="error-message"></p>
+        </div>
+        <hr>
+        <h2>Comments</h2>
+        <form id="comment-form" class="comment-form" method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" name="blog_id" value="{{ blog_details.id }}">
+            <label for="comment-content">Add comment:</label><br>
+            <textarea id="comment-content" name="content" rows="2" cols="106"></textarea><br>
+            <input type="submit" value="Submit" class="btn-submit"><br/><br/>
+        </form>
+        <a href="{% url 'mycommenthistory' blog_details.pk %}" class="my-comment-history">My Comment History</a>
+        <div id="comment-list" class="comment-list">
+            {% if blog_details.comments.all %}
+                {% for comment in blog_details.comments.all %}
+                    <div class="comment-item">
+                        <strong class="comment-author">{{ comment.user.username }}</strong> -
+                        <span class="comment-date">{{ comment.modified_date }}</span>
+                        <div class="comment-text">{{ comment.comment_text }}</div>
+                        <hr>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+  {% endblock %}
+</body>
+</html>

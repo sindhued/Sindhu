@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Novel Blog</title>
+</head>
+
+<body>
+{% block content %}
+
+    <div class="container-main">
+        <div class="blog-list">
+            <ul>
+                <span class="heading">Welcome to the world of Fantasy Reads</span>
+                {% for blog in blog_list %}
+                <div class="blog-item">
+                    <a href="{% url 'blogdetail' blog.pk %}">{{ blog.blogname }}</a> - <span class="author">{{ blog.author }}</span> <br>
+                     <div class="blog-content">
+                        {% if blog.content|length > 200 %}
+                            {{ blog.content|slice:":200" }}...
+                            <span class="read-more"><a href="{% url 'blogdetail' blog.pk %}">Read More</a></span>
+                        {% else %}
+                            {{ blog.content }}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="sidebar">
+            {% if user.is_authenticated %}
+            <ul>
+                <li><a href="{% url 'userblog' %}">List of Blogs you have written</a></li>
+                <li><a href="{% url 'topcommentedblogs' %}">List of Top 5 Commented Blogs</a></li>
+                <li><a href="{% url 'toplikedanddislikedblogs' %}">List of Top 5 Liked and Disliked Blogs in the last 3 days</a></li>
+                <li><a href="{% url 'recent5likedblogs' %}">Your Recently 5 liked blogs</a></li>
+                <li><a href="{% url 'commenthistoryforauthor' %}">My Comment history for Author Saanvi</a></li>
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>
